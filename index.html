@@ -85,6 +85,13 @@
     text-transform:uppercase;
     margin-left:38px;
   }
+  .sync-status{
+    text-transform:none;
+    letter-spacing:0;
+    margin-left:6px;
+    color:var(--sky-deep);
+  }
+  .sync-status.sync-error{color:#E0935A;}
   header.top .underline{
     margin-top:14px;
     height:2px;
@@ -896,7 +903,7 @@
       <h1>Thread收藏✐☡</h1>
       <button class="theme-toggle" id="themeToggle" title="切換深色模式">🌙</button>
     </div>
-    <div class="sub">個人連結收藏 · 私人</div>
+    <div class="sub">與男友共用 · 雲端同步 <span id="syncStatus" class="sync-status"></span></div>
     <div class="underline"></div>
   </header>
 
@@ -1062,7 +1069,9 @@
 </div>
 
 <script>
-const STORAGE_KEY = 'thread-collector-items-v1';
+const SUPABASE_URL = 'https://yxurrhlpffropktfxnki.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_bATnGvOH1xASqxl4Qfpi9Q_IRF9wA8b';
+const SB_TABLE = 'thread_items';
 const LAST_SAVER_KEY = 'thread-collector-last-saver';
 let items = [];
 let editingId = null;
@@ -1073,14 +1082,105 @@ let bulkSelected = new Set();
 let currentView = 'list';
 let dateNav = { category: null, date: null }; // navigation state for date view
 
-function load(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    items = raw ? JSON.parse(raw) : [];
-  }catch(e){ items = []; }
+/* ============ Supabase REST helpers ============ */
+function sbHeaders(extra){
+  return Object.assign({
+    'apikey': SUPABASE_KEY,
+    'Authorization': `Bearer ${SUPABASE_KEY}`,
+    'Content-Type': 'application/json'
+  }, extra||{});
 }
-function save(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+// Convert local item (camelCase, createdAt) -> DB row (snake_case, entry_date)
+function itemToRow(it){
+  return {
+    id: it.id,
+    title: it.title || '',
+    url: it.url || '',
+    note: it.note || '',
+    tags: (it.tags||[]).join(','),
+    pinned: !!it.pinned,
+    saver: it.saver || '',
+    cover: it.cover || null,
+    entry_date: it.createdAt || Date.now()
+  };
+}
+// Convert DB row -> local item
+function rowToItem(row){
+  return {
+    id: row.id,
+    title: row.title || '',
+    url: row.url || '',
+    note: row.note || '',
+    tags: row.tags ? row.tags.split(',').map(t=>t.trim()).filter(Boolean) : [],
+    pinned: !!row.pinned,
+    saver: row.saver || '',
+    cover: row.cover || null,
+    createdAt: row.entry_date || Date.now()
+  };
+}
+async function sbFetchAll(){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${SB_TABLE}?select=*`, {
+    headers: sbHeaders()
+  });
+  if(!res.ok) throw new Error('Fetch failed: ' + res.status);
+  const rows = await res.json();
+  return rows.map(rowToItem);
+}
+async function sbUpsert(item){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${SB_TABLE}?on_conflict=id`, {
+    method: 'POST',
+    headers: sbHeaders({ 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+    body: JSON.stringify(itemToRow(item))
+  });
+  if(!res.ok) throw new Error('Upsert failed: ' + res.status + ' ' + await res.text());
+}
+async function sbUpsertMany(itemsArr){
+  if(itemsArr.length===0) return;
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${SB_TABLE}?on_conflict=id`, {
+    method: 'POST',
+    headers: sbHeaders({ 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+    body: JSON.stringify(itemsArr.map(itemToRow))
+  });
+  if(!res.ok) throw new Error('Bulk upsert failed: ' + res.status + ' ' + await res.text());
+}
+async function sbDelete(id){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${SB_TABLE}?id=eq.${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    headers: sbHeaders({ 'Prefer': 'return=minimal' })
+  });
+  if(!res.ok) throw new Error('Delete failed: ' + res.status);
+}
+async function sbDeleteMany(ids){
+  if(ids.length===0) return;
+  const idList = ids.map(id=>`"${id}"`).join(',');
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${SB_TABLE}?id=in.(${idList})`, {
+    method: 'DELETE',
+    headers: sbHeaders({ 'Prefer': 'return=minimal' })
+  });
+  if(!res.ok) throw new Error('Bulk delete failed: ' + res.status);
+}
+
+let syncStatusEl = null;
+function setSyncStatus(text, isError){
+  if(!syncStatusEl) syncStatusEl = document.getElementById('syncStatus');
+  if(!syncStatusEl) return;
+  syncStatusEl.textContent = text;
+  syncStatusEl.classList.toggle('sync-error', !!isError);
+  if(text && !isError){
+    setTimeout(()=>{ if(syncStatusEl.textContent===text) syncStatusEl.textContent=''; }, 2000);
+  }
+}
+
+async function load(){
+  setSyncStatus('☁️ 同步中…');
+  try{
+    items = await sbFetchAll();
+    setSyncStatus('✓ 已同步');
+  }catch(e){
+    console.error(e);
+    setSyncStatus('⚠️ 連線失敗，請檢查網路', true);
+    items = [];
+  }
 }
 function uid(){
   return Date.now().toString(36) + Math.random().toString(36).slice(2,7);
@@ -1122,15 +1222,25 @@ function getAllTags(){
 function saverFilteredItems(){
   return activeSaver ? items.filter(it=>it.saver===activeSaver) : items;
 }
-function renameTag(oldName, newName){
+async function renameTag(oldName, newName){
+  const affected = [];
   items.forEach(it=>{
     if(!it.tags) return;
+    if(!it.tags.includes(oldName)) return;
     it.tags = it.tags.map(t=> t===oldName ? newName : t);
     // dedupe in case newName already existed in this item's tags
     it.tags = [...new Set(it.tags)];
+    affected.push(it);
   });
   if(activeTag === oldName) activeTag = newName;
-  save();
+  setSyncStatus('☁️ 儲存中…');
+  try{
+    await sbUpsertMany(affected);
+    setSyncStatus('✓ 已同步');
+  }catch(e){
+    console.error(e);
+    setSyncStatus('⚠️ 同步失敗', true);
+  }
 }
 
 /* ============ View switching ============ */
@@ -1445,19 +1555,33 @@ function renderList(){
   list.querySelectorAll('.card').forEach(card=>{
     const id = card.dataset.id;
     card.querySelector('.edit-btn').addEventListener('click', ()=> openModal(id));
-    card.querySelector('.del-btn').addEventListener('click', ()=>{
+    card.querySelector('.del-btn').addEventListener('click', async ()=>{
       if(confirm('確定要刪除這項收藏嗎？')){
         items = items.filter(it=>it.id!==id);
-        save();
         render();
         if(currentView==='date') renderDateView();
+        setSyncStatus('☁️ 刪除中…');
+        try{
+          await sbDelete(id);
+          setSyncStatus('✓ 已同步');
+        }catch(e){
+          console.error(e);
+          setSyncStatus('⚠️ 同步失敗', true);
+        }
       }
     });
-    card.querySelector('.pin-btn').addEventListener('click', ()=>{
+    card.querySelector('.pin-btn').addEventListener('click', async ()=>{
       const it = items.find(i=>i.id===id);
       it.pinned = !it.pinned;
-      save();
       render();
+      setSyncStatus('☁️ 儲存中…');
+      try{
+        await sbUpsert(it);
+        setSyncStatus('✓ 已同步');
+      }catch(e){
+        console.error(e);
+        setSyncStatus('⚠️ 同步失敗', true);
+      }
     });
     const toggle = card.querySelector('.note-toggle');
     if(toggle){
@@ -1735,7 +1859,7 @@ function closeModal(){
   editingId = null;
 }
 
-function saveEntry(){
+async function saveEntry(){
   const title = document.getElementById('f_title').value.trim();
   const url = document.getElementById('f_url').value.trim();
   const note = document.getElementById('f_note').value.trim();
@@ -1749,29 +1873,39 @@ function saveEntry(){
     return;
   }
 
+  let savedItem;
   if(editingId){
     const it = items.find(i=>i.id===editingId);
     it.title = title; it.url = url; it.note = note; it.tags = tags;
     it.createdAt = dateInputToTimestamp(dateVal, it.createdAt);
     it.saver = saver;
     it.cover = currentCover;
+    savedItem = it;
   }else{
-    items.push({
+    savedItem = {
       id: uid(),
       title, url, note, tags,
       pinned: false,
       saver,
       cover: currentCover,
       createdAt: dateInputToTimestamp(dateVal, Date.now())
-    });
+    };
+    items.push(savedItem);
   }
   if(saver){
     localStorage.setItem(LAST_SAVER_KEY, saver);
   }
-  save();
   closeModal();
   render();
   if(currentView==='date') renderDateView();
+  setSyncStatus('☁️ 儲存中…');
+  try{
+    await sbUpsert(savedItem);
+    setSyncStatus('✓ 已同步');
+  }catch(e){
+    console.error(e);
+    setSyncStatus('⚠️ 同步失敗，請檢查網路', true);
+  }
 }
 
 /* ============ Export / Import ============ */
@@ -1873,7 +2007,7 @@ function exportData(){
 }
 function importData(file){
   const reader = new FileReader();
-  reader.onload = (e)=>{
+  reader.onload = async (e)=>{
     try{
       const data = JSON.parse(e.target.result);
       if(!Array.isArray(data)) throw new Error('格式錯誤');
@@ -1881,23 +2015,30 @@ function importData(file){
       if(items.length>0){
         if(!confirm(`匯入 ${valid.length} 筆資料嗎？這會加到目前的清單後面（不會覆蓋現有資料）。`)) return;
       }
-      valid.forEach(d=>{
-        items.push({
-          id: d.id || uid(),
-          title: d.title || '',
-          url: d.url || '',
-          note: d.note || '',
-          tags: Array.isArray(d.tags) ? d.tags : [],
-          pinned: !!d.pinned,
-          saver: d.saver || '',
-          cover: d.cover || null,
-          createdAt: d.createdAt || Date.now()
-        });
-      });
-      save();
+      const newItems = valid.map(d=>({
+        id: d.id || uid(),
+        title: d.title || '',
+        url: d.url || '',
+        note: d.note || '',
+        tags: Array.isArray(d.tags) ? d.tags : [],
+        pinned: !!d.pinned,
+        saver: d.saver || '',
+        cover: d.cover || null,
+        createdAt: d.createdAt || Date.now()
+      }));
+      newItems.forEach(it=>items.push(it));
       render();
       if(currentView==='date') renderDateView();
-      alert('匯入完成！');
+      setSyncStatus('☁️ 匯入中…');
+      try{
+        await sbUpsertMany(newItems);
+        setSyncStatus('✓ 已同步');
+        alert('匯入完成！');
+      }catch(err){
+        console.error(err);
+        setSyncStatus('⚠️ 同步失敗', true);
+        alert('匯入完成，但雲端同步失敗，請檢查網路後重新整理');
+      }
     }catch(err){
       alert('匯入失敗：檔案格式不正確');
     }
@@ -1981,32 +2122,53 @@ document.getElementById('overlay').addEventListener('click', (e)=>{
 });
 document.getElementById('searchInput').addEventListener('input', render);
 document.getElementById('bulkToggleBtn').addEventListener('click', toggleBulkMode);
-document.getElementById('bulkDeleteBtn').addEventListener('click', ()=>{
+document.getElementById('bulkDeleteBtn').addEventListener('click', async ()=>{
   if(bulkSelected.size===0){ alert('還沒選取任何項目'); return; }
   if(confirm(`確定要刪除選取的 ${bulkSelected.size} 筆收藏嗎？`)){
+    const idsToDelete = [...bulkSelected];
     items = items.filter(it=>!bulkSelected.has(it.id));
     bulkSelected.clear();
-    save();
     render();
     if(currentView==='date') renderDateView();
+    setSyncStatus('☁️ 刪除中…');
+    try{
+      await sbDeleteMany(idsToDelete);
+      setSyncStatus('✓ 已同步');
+    }catch(e){
+      console.error(e);
+      setSyncStatus('⚠️ 同步失敗', true);
+    }
   }
 });
-document.getElementById('bulkAddTag').addEventListener('change', (e)=>{
+document.getElementById('bulkAddTag').addEventListener('change', async (e)=>{
   const tag = e.target.value;
   if(!tag || bulkSelected.size===0){
     if(bulkSelected.size===0 && tag) alert('還沒選取任何項目');
     e.target.value='';
     return;
   }
+  const affected = [];
   items.forEach(it=>{
     if(bulkSelected.has(it.id)){
       it.tags = it.tags || [];
-      if(!it.tags.includes(tag)) it.tags.push(tag);
+      if(!it.tags.includes(tag)){
+        it.tags.push(tag);
+        affected.push(it);
+      }
     }
   });
-  save();
   render();
   e.target.value = '';
+  if(affected.length>0){
+    setSyncStatus('☁️ 儲存中…');
+    try{
+      await sbUpsertMany(affected);
+      setSyncStatus('✓ 已同步');
+    }catch(err){
+      console.error(err);
+      setSyncStatus('⚠️ 同步失敗', true);
+    }
+  }
 });
 document.querySelectorAll('.saver-chip').forEach(chip=>{
   chip.addEventListener('click', ()=>{
@@ -2088,9 +2250,14 @@ document.getElementById('themeToggle').addEventListener('click', ()=>{
   applyTheme(next);
 });
 
-load();
 loadTheme();
-render();
+render(); // render immediately with empty state while loading
+load().then(()=>{
+  render();
+  if(currentView==='date') renderDateView();
+  if(currentView==='category') renderCategoryView();
+  if(currentView==='stats') renderStatsView();
+});
 </script>
 </body>
 </html>
