@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thread收藏✐☡</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Zen+Maru+Gothic:wght@400;500;700&display=swap');
+
+  :root{
+    --paper:#F3F8FD;
+    --ink:#3A4A5C;
+    --ink-soft:#94ABBE;
+    --line:#D9E9F7;
+    --line-soft:#E9F3FB;
+    --card:#FFFFFF;
+    --sky:#7FB8E8;
+    --sky-soft:#EAF4FD;
+    --sky-deep:#5A9BD4;
+  }
+  [data-theme="dark"]{
+    --paper:#1B232E;
+    --ink:#E4EDF6;
+    --ink-soft:#7C8FA3;
+    --line:#2E3D4F;
+    --line-soft:#26323F;
+    --card:#232E3C;
+    --sky:#5A9BD4;
+    --sky-soft:#2A3C4E;
+    --sky-deep:#8FC4F2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Zen Maru Gothic', 'Nunito', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(var(--line-soft) 1.5px, transparent 1.5px);
+    background-size:24px 24px;
+    transition:background-color .2s ease, color .2s ease;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:36px 20px 80px;}
+
+  /* Header */
+  header.top{
+    margin-bottom:20px;
+  }
+  .title-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:4px;
+  }
+  .title-row h1{flex:1;}
+  .theme-toggle{
+    flex-shrink:0;
+    border:2px solid var(--line);
+    background:var(--card);
+    border-radius:50%;
+    width:36px;height:36px;
+    font-size:15px;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    padding:0;
+    transition:all .15s ease;
+  }
+  .theme-toggle:hover{border-color:var(--sky);background:var(--sky-soft);}
+  .mark{
+    flex-shrink:0;
+  }
+  header.top h1{
+    font-family:'Zen Maru Gothic', sans-serif;
+    font-size:26px;
+    margin:0;
+    font-weight:700;
+    letter-spacing:0.02em;
+    color:var(--sky-deep);
+  }
+  header.top .sub{
+    font-size:11px;
+    letter-spacing:0.15em;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    margin-left:38px;
+  }
+  .sync-status{
+    text-transform:none;
+    letter-spacing:0;
+    margin-left:6px;
+    color:var(--sky-deep);
+    word-break:break-all;
+  }
+  .sync-status.sync-error{
+    color:#E0935A;
+    display:block;
+    margin-left:0;
+    margin-top:4px;
+  }
+  header.top .underline{
+    margin-top:14px;
+    height:2px;
+    background:repeating-linear-gradient(to right, var(--sky) 0 6px, transparent 6px 10px);
+    border-radius:2px;
+  }
+
+  /* Top bar: add button + tabs */
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:20px 0 16px;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .tabs{display:flex;gap:6px;}
+  .tab{
+    font-family:'Zen Maru Gothic', sans-serif;
+    font-weight:700;
+    font-size:13px;
+    padding:8px 18px;
+    background:var(--card);
+    border:2px solid var(--sky);
+    border-radius:20px;
+    color:var(--sky-deep);
+    cursor:pointer;
+  }
+  .tab.active{background:var(--sky-deep);color:#fff;border-color:var(--sky-deep);}
+
+  .more-menu{
+    font-family:'Zen Maru Gothic', sans-serif;
+    font-weight:700;
+    font-size:13px;
+    padding:8px 30px 8px 16px;
+    background:var(--card);
+    color:var(--sky-deep);
+    border:2px solid var(--sky);
+    border-radius:20px;
+    cursor:pointer;
+    -webkit-appearance:none;
+    appearance:none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--sky-deep) 50%), linear-gradient(135deg, var(--sky-deep) 50%, transparent 50%);
+    background-position: calc(100% - 16px) center, calc(100% - 11px) center;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat:no-repeat;
+  }
+  .more-menu.active-view{background-color:var(--sky-deep);color:#fff;}
+  .more-menu.active-view{
+    background-image: linear-gradient(45deg, transparent 50%, #fff 50%), linear-gradient(135deg, #fff 50%, transparent 50%);
+  }
+
+  button{
+    font-family:'Nunito', 'Zen Maru Gothic', sans-serif;
+    font-weight:700;
+    font-size:12.5px;
+    letter-spacing:0.02em;
+    border:2px solid var(--sky);
+    background:var(--card);
+    color:var(--sky-deep);
+    padding:9px 18px;
+    border-radius:20px;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  button:hover{background:var(--sky-soft);}
+  button.primary{
+    font-family:'Zen Maru Gothic', sans-serif;
+    background:var(--sky-deep);
+    color:#fff;
+    border-color:var(--sky-deep);
+    box-shadow:0 3px 0 var(--line);
+  }
+  button.primary:hover{background:var(--sky-deep);opacity:0.9;}
+  button.ghost{border-color:var(--line);color:var(--ink-soft);}
+  button.ghost:hover{background:var(--line-soft);}
+  button.random{
+    background:var(--sky-soft);
+    color:var(--sky-deep);
+    border-color:var(--sky-soft);
+  }
+  button.random:hover{background:var(--sky);color:#fff;}
+
+  /* Random review overlay */
+  .review-card{
+    background:var(--card);
+    border:2px solid var(--sky);
+    border-radius:20px;
+    padding:24px;
+    width:100%;max-width:440px;
+    text-align:center;
+  }
+  .review-card .eyebrow{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.15em;
+    color:var(--sky-deep);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .review-card h3{
+    font-family:'Zen Maru Gothic',sans-serif;
+    font-size:18px;
+    margin:0 0 8px;
+  }
+  .review-card h3 a{color:var(--ink);text-decoration:none;border-bottom:2px solid var(--sky-soft);}
+  .review-card .note{font-size:13px;color:var(--ink-soft);margin:8px 0;line-height:1.6;}
+  .review-card .tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:10px 0;}
+  .review-card .tag{
+    font-size:10.5px;font-weight:700;padding:3px 11px;
+    background:var(--sky-soft);color:var(--sky-deep);border-radius:20px;
+  }
+  .review-card .actions{display:flex;gap:8px;justify-content:center;margin-top:16px;}
+
+  /* Controls */
+  .controls{
+    display:flex;
+    gap:10px;
+    margin-bottom:14px;
+    flex-wrap:wrap;
+  }
+  .search-box{
+    flex:1;
+    min-width:160px;
+    position:relative;
+  }
+  .search-box input{
+    width:100%;
+    padding:10px 14px 10px 36px;
+    border:2px solid var(--line);
+    background:var(--card);
+    font-family:'Zen Maru Gothic',sans-serif;
+    font-size:13.5px;
+    border-radius:20px;
+    color:var(--ink);
+  }
+  .search-box input:focus{outline:none;border-color:var(--sky);}
+  .search-box::before{
+    content:"";
+    position:absolute;
+    left:14px;top:12px;
+    width:10px;height:10px;
+    border:2px solid var(--ink-soft);
+    border-radius:50%;
+  }
+  .search-box::after{
+    content:"";
+    position:absolute;
+    left:22px;top:20px;
+    width:6px;height:2px;
+    background:var(--ink-soft);
+    transform:rotate(45deg);
+    border-radius:1px;
+  }
+
+  /* Tag filter row */
+  .tag-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:14px;
+  }
+  .cat-filter-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:10px;
+  }
+  .cat-filter-select{
+    padding:8px 28px 8px 13px;
+    border:2px solid var(--sky-soft);
+    background:var(--sky-soft);
+    color:var(--sky-deep);
+    font-family:'Zen Maru Gothic',sans-serif;
+    font-size:12.5px;
+    font-weight:700;
+    border-radius:20px;
+    cursor:pointer;
+    -webkit-appearance:none;
+    appearance:none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--sky-deep) 50%), linear-gradient(135deg, var(--sky-deep) 50%, transparent 50%);
+    background-position: calc(100% - 12px) center, calc(100% - 7px) center;
+    background-size: 4px 4px, 4px 4px;
+    background-repeat:no-repeat;
+    -webkit-text-fill-color:var(--sky-deep);
+    transition:all .12s ease;
+  }
+  .cat-filter-select.has-value{
+    background-color:var(--sky-deep);
+    border-color:var(--sky-deep);
+    color:#fff;
+    -webkit-text-fill-color:#fff;
+    background-image: linear-gradient(45deg, transparent 50%, #fff 50%), linear-gradient(135deg, #fff 50%, transparent 50%);
+  }
+  .tag-dropdown{
+    flex:1;
+    min-width:160px;
+    padding:9px 30px 9px 14px;
+    border:2px solid var(--sky);
+    background:var(--card);
+    color:var(--ink);
+    font-family:'Zen Maru Gothic',sans-serif;
+    font-size:13px;
+    font-weight:700;
+    border-radius:20px;
+    cursor:pointer;
+    -webkit-appearance:none;
+    appearance:none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--sky-deep) 50%), linear-gradient(135deg, var(--sky-deep) 50%, transparent 50%);
+    background-position: calc(100% - 16px) center, calc(100% - 11px) center;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat:no-repeat;
+    -webkit-text-fill-color:var(--ink);
+  }
+  .tag-chip{
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:0.02em;
+    padding:6px 13px;
+    border:2px solid var(--line);
+    border-radius:20px;
+    cursor:pointer;
+    color:var(--ink-soft);
+    background:var(--card);
+    transition:all .12s ease;
+  }
+  .tag-chip:hover{border-color:var(--sky);color:var(--sky-deep);}
+  .tag-chip.active{
+    background:var(--sky-deep);
+    color:#fff;
+    border-color:var(--sky-deep);
+  }
+
+  .saver-filter-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:12px;
+  }
+  .saver-chip{
+    font-size:12px;
+    font-weight:700;
+    padding:6px 14px;
+    border:2px solid var(--line);
+    border-radius:20px;
+    cursor:pointer;
+    color:var(--ink-soft);
+    background:var(--card);
+    transition:all .12s ease;
+  }
+  .saver-chip:hover{border-color:var(--sky);color:var(--sky-deep);}
+  .saver-chip.active{
+    background:var(--sky-deep);
+    color:#fff;
+    border-color:var(--sky-deep);
+  }
+
+  #bulkToggleBtn.active{
+    background:var(--sky-deep);
+    color:#fff;
+    border-color:var(--sky-deep);
+  }
+  .bulk-bar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    background:var(--sky-soft);
+    border:2px solid var(--sky);
+    border-radius:14px;
+    padding:10px 14px;
+    margin-bottom:12px;
+  }
+  .bulk-count{
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--sky-deep);
+  }
+  .bulk-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .bulk-actions select{
+    padding:7px 28px 7px 12px;
+    border:2px solid var(--line);
+    background:var(--card);
+    color:var(--ink);
+    font-family:'Zen Maru Gothic',sans-serif;
+    font-size:12px;
+    font-weight:700;
+    border-radius:14px;
+    cursor:pointer;
+    -webkit-appearance:none;
+    appearance:none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--sky-deep) 50%), linear-gradient(135deg, var(--sky-deep) 50%, transparent 50%);
+    background-position: calc(100% - 14px) center, calc(100% - 9px) center;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat:no-repeat;
+  }
+  .bulk-actions button{padding:7px 14px;font-size:12px;}
+
+  .card-checkbox{
+    width:18px;height:18px;
+    cursor:pointer;
+    accent-color: var(--sky-deep);
+    display:none;
+    flex-shrink:0;
+  }
+  .bulk-mode .card-checkbox{display:block;}
+  .bulk-mode .card.checked{border-color:var(--sky); box-shadow:0 3px 0 var(--sky-soft);}
+
+  /* Cards */
+  #list{display:flex;flex-direction:column;gap:13px;}
+  .card{
+    background:var(--card);
+    border:2px solid var(--line);
+    border-radius:18px;
+    padding:16px 20px;
+    position:relative;
+    box-shadow:0 3px 0 var(--line-soft);
+  }
+  .card-body{
+    display:flex;
+    gap:14px;
+  }
+  .card-cover{
+    flex-shrink:0;
+    width:64px;height:64px;
+    border-radius:12px;
+    overflow:hidden;
+    border:2px solid var(--line-soft);
+  }
+  .card-cover img{
+    width:100%;height:100%;
+    object-fit:cover;
+  }
+  .card-content{
+    flex:1;
+    min-width:0;
+  }
+  .cat-path{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    flex-wrap:wrap;
+    margin-bottom:5px;
+    font-size:11px;
+    font-weight:700;
+    color:var(--sky-deep);
+  }
+  .cat-path .cat-sep{
+    color:var(--line);
+    font-size:10px;
+  }
+  .card .title{
+    font-family:'Zen Maru Gothic', sans-serif;
+    font-size:16.5px;
+    font-weight:700;
+    margin:0 0 4px;
+    word-break:break-word;
+    padding-right:90px;
+    color:var(--ink);
+  }
+  .card .title a{
+    color:var(--ink);
+    text-decoration:none;
+    border-bottom:2px solid var(--sky-soft);
+  }
+  .card .title a:hover{border-bottom-color:var(--sky);}
+  .card .note{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin:6px 0 10px;
+    white-space:pre-wrap;
+    line-height:1.65;
+  }
+  .card .meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .card .tags{display:flex;gap:6px;flex-wrap:wrap;}
+  .card .tag{
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:0.02em;
+    padding:3px 11px;
+    background:var(--sky-soft);
+    color:var(--sky-deep);
+    border-radius:20px;
+  }
+  .card .tag.saver-tag{
+    background:var(--line-soft);
+    color:var(--ink-soft);
+    border:1.5px solid var(--line);
+  }
+  .card .actions{display:flex;gap:6px;flex-shrink:0;}
+  .card .actions button{padding:5px 12px;font-size:11px;}
+  .card .pin-star{
+    display:flex;
+    align-items:center;
+    gap:2px;
+  }
+  .card .pin-btn{
+    border:1.5px solid var(--line);
+    background:transparent;
+    cursor:pointer;
+    font-size:11.5px;
+    font-weight:700;
+    padding:4px 10px;
+    border-radius:20px;
+    color:var(--ink-soft);
+    transition:all .15s ease;
+    font-family:'Zen Maru Gothic',sans-serif;
+  }
+  .card .pin-btn:hover{border-color:var(--sky);color:var(--sky-deep);}
+  .card .pin-btn.pinned{
+    background:#FFF3DA;
+    border-color:#FFC75A;
+    color:#B8860B;
+  }
+  .card.is-pinned{border-color:#FFE2A8; box-shadow:0 3px 0 #FFF3DA;}
+  .card .visit-btn{
+    border:1.5px solid var(--line);
+    background:transparent;
+    cursor:pointer;
+    font-size:11.5px;
+    font-weight:700;
+    padding:4px 10px;
+    border-radius:20px;
+    color:var(--ink-soft);
+    transition:all .15s ease;
+    font-family:'Zen Maru Gothic',sans-serif;
+  }
+  .card .visit-btn:hover{border-color:#6DB87A;color:#4A9A5A;}
+  .card .visit-btn.visited{
+    background:#D6F0DA;
+    border-color:#6DB87A;
+    color:#3A7A48;
+  }
+  .card.is-visited{ border-color:#B8E0BF; box-shadow:0 3px 0 #D6F0DA; }
+  .card.is-visited .title a{ text-decoration:line-through; opacity:0.7; }
+  .card .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:6px;
+  }
+  .card .date{
+    font-size:10.5px;
+    font-weight:700;
+    color:var(--ink-soft);
+    letter-spacing:0.03em;
+  }
+  .card .note.collapsed{
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .card .note-toggle{
+    font-size:11px;
+    font-weight:700;
+    color:var(--sky-deep);
+    cursor:pointer;
+    display:inline-block;
+    margin-top:2px;
+  }
+
+  /* Empty state */
+  .empty{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--ink-soft);
+    border:2px dashed var(--line);
+    border-radius:18px;
+  }
+  .empty .big{
+    display:block;
+    margin:0 auto 14px;
+    width:34px;
+  }
+  .empty p{font-size:12.5px;letter-spacing:0.03em;}
+
+
+
+  .filter-banner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    background:var(--sky-soft);
+    border:2px solid var(--sky);
+    border-radius:14px;
+    padding:10px 16px;
+    margin-bottom:14px;
+    font-size:13px;
+    font-weight:700;
+    color:var(--sky-deep);
+  }
+  .filter-banner .clear-filter{
+    font-size:11px;
+    border:none;
+    background:#fff;
+    color:var(--sky-deep);
+    padding:5px 12px;
+    border-radius:20px;
+    cursor:pointer;
+    font-weight:700;
+  }
+  .filter-banner .clear-filter:hover{background:var(--sky-deep);color:#fff;}
+  .link-list{display:flex;flex-direction:column;gap:10px;}
+  .link-item{
+    background:var(--card);
+    border:2px solid var(--line-soft);
+    border-radius:14px;
+    padding:11px 14px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .link-item .thumb{
+    width:40px;height:40px;
+    border-radius:12px;
+    flex-shrink:0;
+    border:2px solid var(--sky-soft);
+    background:var(--sky-soft);
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .link-item .thumb img{width:20px;height:20px;}
+  .link-item .thumb .fallback{font-size:14px;color:var(--sky-deep);}
+  .link-item .info{flex:1;min-width:0;}
+  .link-item .info .name{
+    font-size:13.5px;
+    font-weight:700;
+    color:var(--ink);
+    text-decoration:none;
+    display:block;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .link-item .info .url{
+    font-size:11px;
+    color:var(--ink-soft);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .link-item .tags-mini{display:flex;gap:4px;flex-shrink:0;}
+  .link-item .tags-mini .tag{font-size:10px;padding:2px 9px;}
+
+  /* Modal */
+  .overlay{
+    position:fixed;inset:0;
+    background:rgba(34,34,32,0.45);
+    display:none;
+    align-items:center;justify-content:center;
+    z-index:50;
+    padding:20px;
+  }
+  .overlay.show{display:flex;}
+  .modal{
+    background:var(--card);
+    border:2px solid var(--sky);
+    width:100%;max-width:480px;
+    padding:26px;
+    border-radius:20px;
+    max-height:90vh;
+    overflow-y:auto;
+  }
+  .modal h2{
+    font-family:'Zen Maru Gothic',sans-serif;
+    margin:0 0 18px;
+    font-size:19px;
+    font-weight:700;
+    color:var(--sky-deep);
+    border-bottom:2px solid var(--sky-soft);
+    padding-bottom:12px;
+  }
+  .field{margin-bottom:14px;}
+  .field label{
+    display:block;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+    margin-bottom:5px;
+  }
+  .field input, .field textarea, .field select{
+    width:100%;
+    padding:10px 13px;
+    border:2px solid var(--line);
+    background:var(--sky-soft);
+    font-family:'Zen Maru Gothic',sans-serif;
+    font-size:13.5px;
+    border-radius:12px;
+    resize:vertical;
+    color:var(--ink);
+    -webkit-text-fill-color:var(--ink);
+  }
+  .field input::placeholder, .field textarea::placeholder{
+    color:var(--ink-soft);
+    opacity:1;
+    -webkit-text-fill-color:var(--ink-soft);
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{
+    outline:none;
+    border-color:var(--sky);
+    background:#fff;
+  }
+  .field .hint{
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-top:4px;
+  }
+  .field input[type="date"]{
+    color-scheme: light;
+  }
+  [data-theme="dark"] .field input[type="date"]{
+    color-scheme: dark;
+  }
+  .tag-input-row{
+    display:flex;
+    gap:8px;
+  }
+  .tag-input-row select{
+    flex:0 0 38%;
+    min-width:0;
+  }
+  .tag-input-row input{
+    flex:1;
+    min-width:0;
+  }
+  .cat-input-row{
+    display:flex;
+    gap:8px;
+  }
+  .cat-select{
+    flex:0 0 45%;
+    min-width:0;
+    padding:9px 28px 9px 12px;
+    border:2px solid var(--line);
+    background:var(--sky-soft);
+    color:var(--ink);
+    font-family:'Zen Maru Gothic',sans-serif;
+    font-size:13px;
+    font-weight:700;
+    border-radius:12px;
+    -webkit-appearance:none;
+    appearance:none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--sky-deep) 50%), linear-gradient(135deg, var(--sky-deep) 50%, transparent 50%);
+    background-position: calc(100% - 14px) center, calc(100% - 9px) center;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat:no-repeat;
+    -webkit-text-fill-color:var(--ink);
+  }
+  .cat-input-row input{
+    flex:1;
+    min-width:0;
+  }
+  .tag-suggestions{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-top:8px;
+  }
+  .tag-suggestions .sugg-pill{
+    font-size:11.5px;
+    font-weight:700;
+    padding:5px 12px;
+    background:var(--sky-soft);
+    color:var(--sky-deep);
+    border:none;
+    border-radius:20px;
+    cursor:pointer;
+    transition:all .12s ease;
+  }
+  .tag-suggestions .sugg-pill:hover{background:var(--sky);color:#fff;}
+  .tag-suggestions .sugg-pill.used{opacity:0.4;}
+
+  .cover-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .cover-preview{
+    width:64px;height:64px;
+    border-radius:12px;
+    border:2px dashed var(--line);
+    background:var(--sky-soft);
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+    flex-shrink:0;
+  }
+  .cover-preview img{
+    width:100%;height:100%;
+    object-fit:cover;
+  }
+  .cover-preview .cover-placeholder{
+    font-size:9.5px;
+    color:var(--ink-soft);
+    text-align:center;
+    padding:0 4px;
+    line-height:1.3;
+  }
+  .cover-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .cover-actions button{padding:7px 14px;font-size:11.5px;}
+  #f_cover{display:none;}
+
+  .dup-hint{
+    color:#E0935A !important;
+    font-weight:700;
+  }
+  .modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-top:20px;
+    border-top:2px solid var(--sky-soft);
+    padding-top:16px;
+  }
+
+  /* Footer / data tools */
+  .data-tools{
+    margin-top:32px;
+    border-top:1px solid var(--line);
+    padding-top:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .data-tools .label{
+    font-size:11px;
+    letter-spacing:0.08em;
+    color:var(--ink-soft);
+  }
+  .data-tools .group{display:flex;gap:8px;flex-wrap:wrap;}
+  .export-progress{
+    margin-top:10px;
+    font-size:12px;
+    font-weight:700;
+    color:var(--sky-deep);
+    text-align:center;
+  }
+  input[type="file"]{display:none;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="title-row">
+      <!-- tiny line-drawn raindrop mark -->
+      <svg class="mark" width="28" height="32" viewBox="0 0 28 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 2 C6 13 3 20 3 24 C3 28.5 8 30 14 30 C20 30 25 28.5 25 24 C25 20 22 13 14 2 Z" stroke="#5A9BD4" stroke-width="1.8" fill="#EAF4FD"/>
+        <path d="M9 22 C9 25 11.5 26.5 14 26.5" stroke="#5A9BD4" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+      </svg>
+      <h1>Thread收藏✐☡</h1>
+      <button class="theme-toggle" id="themeToggle" title="切換深色模式">🌙</button>
+    </div>
+    <div class="sub">與男友共用 · 雲端同步 <span id="syncStatus" class="sync-status"></span></div>
+    <div class="underline"></div>
+  </header>
+
+  <div class="topbar">
+    <div class="tabs">
+      <button class="tab active" data-view="list">全部收藏</button>
+      <button class="random" id="randomBtn">🎲 隨機回顧</button>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="primary" id="addBtn">+ 新增收藏</button>
+    </div>
+  </div>
+
+  <!-- ===== List View ===== -->
+  <div id="listView">
+    <div class="controls">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="搜尋標題、筆記、連結、分類…">
+      </div>
+      <button class="ghost" id="bulkToggleBtn">多選</button>
+    </div>
+    <div class="saver-filter-row">
+      <button class="saver-chip" data-saver="">全部</button>
+      <button class="saver-chip" data-saver="小雞毛">🐤 小雞毛</button>
+      <button class="saver-chip" data-saver="小白">🤍 小白</button>
+    </div>
+    <div id="bulkBar" class="bulk-bar" style="display:none;">
+      <span class="bulk-count" id="bulkCount">已選 0 筆</span>
+      <div class="bulk-actions">
+        <button class="ghost" id="bulkDeleteBtn">刪除選取</button>
+      </div>
+    </div>
+    <div id="filterBanner"></div>
+    <div class="cat-filter-row" id="cat1FilterRow"></div>
+    <div id="list"></div>
+  </div>
+
+  <!-- ===== Data Tools ===== -->
+  <div class="data-tools">
+    <span class="label">資料 · 共 <span id="countLabel">0</span> 筆</span>
+    <div class="group">
+      <button class="ghost" id="exportHtmlBtn">匯出分享頁面</button>
+      <button class="ghost" id="exportPdfBtn">匯出 PDF</button>
+      <button class="ghost" id="exportWordBtn">匯出 Word</button>
+      <button class="ghost" id="exportJpegBtn">匯出 JPEG</button>
+      <button class="ghost" id="exportBtn">匯出 JSON</button>
+      <button class="ghost" id="importBtn">匯入 JSON</button>
+      <input type="file" id="fileInput" accept="application/json">
+    </div>
+  </div>
+
+  <div id="exportProgress" class="export-progress" style="display:none;"></div>
+</div>
+
+<!-- Random Review Modal -->
+<div class="overlay" id="reviewOverlay">
+  <div class="review-card" id="reviewCard"></div>
+</div>
+
+<!-- Modal -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h2 id="modalTitle">新增收藏</h2>
+    <div class="field">
+      <label>標題</label>
+      <input type="text" id="f_title" placeholder="文章 / Thread 標題">
+    </div>
+    <div class="field">
+      <label>連結</label>
+      <input type="text" id="f_url" placeholder="https://...">
+      <div class="hint" id="dupHint"></div>
+    </div>
+    <div class="field">
+      <label>封面圖片（選填）</label>
+      <div class="cover-row">
+        <div class="cover-preview" id="coverPreview">
+          <span class="cover-placeholder">尚未選擇圖片</span>
+        </div>
+        <div class="cover-actions">
+          <button type="button" class="ghost" id="coverPickBtn">選擇圖片</button>
+          <button type="button" class="ghost" id="coverRemoveBtn" style="display:none;">移除</button>
+        </div>
+        <input type="file" id="f_cover" accept="image/*">
+      </div>
+      <div class="hint">自己截圖上傳，做成卡片小封面（存在這台裝置裡，不會上傳到任何伺服器）</div>
+    </div>
+    <div class="field">
+      <label>主分類（大類）</label>
+      <div class="cat-input-row">
+        <select id="f_cat1_select" class="cat-select">
+          <option value="">選擇已有大類…</option>
+        </select>
+        <input type="text" id="f_cat1" placeholder="或輸入新大類，例如：旅遊">
+      </div>
+    </div>
+    <div class="field" id="cat2Field" style="display:none;">
+      <label>次分類（中類）</label>
+      <div class="cat-input-row">
+        <select id="f_cat2_select" class="cat-select">
+          <option value="">選擇已有中類…</option>
+        </select>
+        <input type="text" id="f_cat2" placeholder="或輸入新中類，例如：日本">
+      </div>
+    </div>
+    <div class="field" id="cat3Field" style="display:none;">
+      <label>細分類（小類）</label>
+      <div class="cat-input-row">
+        <select id="f_cat3_select" class="cat-select">
+          <option value="">選擇已有小類…</option>
+        </select>
+        <input type="text" id="f_cat3" placeholder="或輸入新小類，例如：東京地區">
+      </div>
+    </div>
+    <div class="field">
+      <label>存入日期</label>
+      <input type="date" id="f_date">
+      <div class="hint">會用這個日期來分類在「依日期」檢視中</div>
+    </div>
+    <div class="field">
+      <label>這是誰存的</label>
+      <select id="f_saver">
+        <option value="">— 不指定 —</option>
+        <option value="小雞毛">小雞毛</option>
+        <option value="小白">小白</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>心得 / 筆記</label>
+      <textarea id="f_note" rows="4" placeholder="寫點什麼，方便以後回想"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="ghost" id="cancelBtn">取消</button>
+      <button class="primary" id="saveBtn">儲存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://yxurrhlpffropktfxnki.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_bATnGvOH1xASqxl4Qfpi9Q_IRF9wA8b';
+const SB_TABLE = 'thread_items';
+const LAST_SAVER_KEY = 'thread-collector-last-saver';
+let items = [];
+let editingId = null;
+let activeSaver = null;
+let activeCat1 = null;
+let activeCat2 = null;
+let bulkMode = false;
+let bulkSelected = new Set();
+let currentView = 'list';
+
+/* ============ Supabase REST helpers ============ */
+function sbHeaders(extra){
+  return Object.assign({
+    'apikey': SUPABASE_KEY,
+    'Authorization': `Bearer ${SUPABASE_KEY}`,
+    'Content-Type': 'application/json'
+  }, extra||{});
+}
+// Convert local item (camelCase, createdAt) -> DB row (snake_case, entry_date)
+function itemToRow(it){
+  return {
+    id: it.id,
+    title: it.title || '',
+    url: it.url || '',
+    note: it.note || '',
+    tags: (it.tags||[]).join(','),
+    pinned: !!it.pinned,
+    visited: !!it.visited,
+    saver: it.saver || '',
+    cover: it.cover || null,
+    entry_date: it.createdAt || Date.now(),
+    cat1: it.cat1 || null,
+    cat2: it.cat2 || null,
+    cat3: it.cat3 || null
+  };
+}
+function rowToItem(row){
+  return {
+    id: row.id,
+    title: row.title || '',
+    url: row.url || '',
+    note: row.note || '',
+    tags: row.tags ? row.tags.split(',').map(t=>t.trim()).filter(Boolean) : [],
+    pinned: !!row.pinned,
+    visited: !!row.visited,
+    saver: row.saver || '',
+    cover: row.cover || null,
+    createdAt: row.entry_date || Date.now(),
+    cat1: row.cat1 || null,
+    cat2: row.cat2 || null,
+    cat3: row.cat3 || null
+  };
+}
+async function sbFetchAll(){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${SB_TABLE}?select=*`, {
+    headers: sbHeaders()
+  });
+  if(!res.ok) throw new Error('Fetch failed: ' + res.status);
+  const rows = await res.json();
+  return rows.map(rowToItem);
+}
+async function sbUpsert(item){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${SB_TABLE}?on_conflict=id`, {
+    method: 'POST',
+    headers: sbHeaders({ 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+    body: JSON.stringify(itemToRow(item))
+  });
+  if(!res.ok) throw new Error('Upsert failed: ' + res.status + ' ' + await res.text());
+}
+async function sbUpsertMany(itemsArr){
+  if(itemsArr.length===0) return;
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${SB_TABLE}?on_conflict=id`, {
+    method: 'POST',
+    headers: sbHeaders({ 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+    body: JSON.stringify(itemsArr.map(itemToRow))
+  });
+  if(!res.ok) throw new Error('Bulk upsert failed: ' + res.status + ' ' + await res.text());
+}
+async function sbDelete(id){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${SB_TABLE}?id=eq.${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    headers: sbHeaders({ 'Prefer': 'return=minimal' })
+  });
+  if(!res.ok) throw new Error('Delete failed: ' + res.status);
+}
+async function sbDeleteMany(ids){
+  if(ids.length===0) return;
+  const idList = ids.map(id=>`"${id}"`).join(',');
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${SB_TABLE}?id=in.(${idList})`, {
+    method: 'DELETE',
+    headers: sbHeaders({ 'Prefer': 'return=minimal' })
+  });
+  if(!res.ok) throw new Error('Bulk delete failed: ' + res.status);
+}
+
+let syncStatusEl = null;
+function setSyncStatus(text, isError){
+  if(!syncStatusEl) syncStatusEl = document.getElementById('syncStatus');
+  if(!syncStatusEl) return;
+  syncStatusEl.textContent = text;
+  syncStatusEl.classList.toggle('sync-error', !!isError);
+  if(text && !isError){
+    setTimeout(()=>{ if(syncStatusEl.textContent===text) syncStatusEl.textContent=''; }, 2000);
+  }
+}
+
+async function load(){
+  setSyncStatus('☁️ 同步中…');
+  try{
+    items = await sbFetchAll();
+    setSyncStatus('✓ 已同步');
+  }catch(e){
+    console.error(e);
+    setSyncStatus('⚠️ 連線失敗，請檢查網路', true);
+    items = [];
+  }
+}
+function uid(){
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+}
+function escapeHtml(str){
+  return (str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function formatDate(ts){
+  const d = new Date(ts);
+  return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
+}
+function toDateInputValue(ts){
+  const d = new Date(ts);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function dateInputToTimestamp(value, fallback){
+  // value is "YYYY-MM-DD"; preserve time-of-day from fallback (or now) for nicer ordering
+  if(!value) return fallback || Date.now();
+  const [y,m,d] = value.split('-').map(Number);
+  const ref = new Date(fallback || Date.now());
+  const dt = new Date(y, m-1, d, ref.getHours(), ref.getMinutes(), ref.getSeconds(), ref.getMilliseconds());
+  return dt.getTime();
+}
+function getFavicon(url){
+  try{
+    const u = new URL(url);
+    return `https://www.google.com/s2/favicons?domain=${u.hostname}&sz=64`;
+  }catch(e){ return null; }
+}
+function getHostname(url){
+  try{ return new URL(url).hostname; }catch(e){ return url; }
+}
+
+
+/* ============ View switching ============ */
+function switchView(view){
+  currentView = view;
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.classList.toggle('active', t.dataset.view === view);
+  });
+  document.getElementById('listView').style.display = view==='list' ? '' : 'none';
+  syncSaverChips();
+}
+
+
+/* ============ List View ============ */
+function syncSaverChips(){
+  document.querySelectorAll('.saver-chip').forEach(chip=>{
+    chip.classList.toggle('active', chip.dataset.saver === (activeSaver || ''));
+  });
+}
+
+/* ============ Bulk Select ============ */
+function toggleBulkMode(){
+  bulkMode = !bulkMode;
+  bulkSelected.clear();
+  document.getElementById('bulkToggleBtn').classList.toggle('active', bulkMode);
+  document.getElementById('listView').classList.toggle('bulk-mode', bulkMode);
+  document.getElementById('bulkBar').style.display = bulkMode ? '' : 'none';
+  render();
+}
+function updateBulkBar(){
+  document.getElementById('bulkCount').textContent = `已選 ${bulkSelected.size} 筆`;
+}
+
+function render(){
+  renderFilterBanner();
+  renderCatFilter();
+  renderList();
+  syncSaverChips();
+  if(bulkMode) updateBulkBar();
+  document.getElementById('countLabel').textContent = items.length;
+}
+
+function renderCatFilter(){
+  const row = document.getElementById('cat1FilterRow');
+  const tree = getCatTree();
+  const cat1s = Object.keys(tree).sort();
+  if(cat1s.length === 0){ row.innerHTML = ''; return; }
+
+  let html = `<select class="cat-filter-select ${activeCat1?'has-value':''}" id="catFilter1">
+    <option value="">全部大類</option>
+    ${cat1s.map(c=>`<option value="${escapeHtml(c)}" ${activeCat1===c?'selected':''}>${escapeHtml(c)}</option>`).join('')}
+  </select>`;
+
+  if(activeCat1 && tree[activeCat1]){
+    const cat2s = Object.keys(tree[activeCat1]).sort();
+    if(cat2s.length > 0){
+      html += `<select class="cat-filter-select ${activeCat2?'has-value':''}" id="catFilter2">
+        <option value="">全部中類</option>
+        ${cat2s.map(c=>`<option value="${escapeHtml(c)}" ${activeCat2===c?'selected':''}>${escapeHtml(c)}</option>`).join('')}
+      </select>`;
+    }
+  }
+  row.innerHTML = html;
+
+  document.getElementById('catFilter1').addEventListener('change', (e)=>{
+    activeCat1 = e.target.value || null;
+    activeCat2 = null;
+    render();
+  });
+  const f2 = document.getElementById('catFilter2');
+  if(f2) f2.addEventListener('change', (e)=>{
+    activeCat2 = e.target.value || null;
+    render();
+  });
+}
+
+function renderFilterBanner(){ document.getElementById("filterBanner").innerHTML = ""; }
+
+
+function renderList(){
+  const list = document.getElementById('list');
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+
+  let filtered = items.filter(it=>{
+    if(activeSaver && it.saver !== activeSaver) return false;
+    if(activeCat1 && it.cat1 !== activeCat1) return false;
+    if(activeCat2 && it.cat2 !== activeCat2) return false;
+    if(!q) return true;
+    const hay = [it.title, it.note, it.url, (it.tags||[]).join(' '), it.cat1, it.cat2, it.cat3].filter(Boolean).join(' ').toLowerCase();
+    return hay.includes(q);
+  });
+
+  filtered.sort((a,b)=> (b.pinned?1:0) - (a.pinned?1:0) || b.createdAt - a.createdAt);
+
+  if(filtered.length === 0){
+    list.innerHTML = `<div class="empty">${emptySvg()}<p>${items.length===0 ? '還沒有收藏 — 點右上角「+ 新增收藏」開始' : '找不到符合條件的項目'}</p></div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(it => {
+    const noteId = 'note-' + it.id;
+    const isLong = (it.note||'').length > 60 || (it.note||'').split('\n').length > 2;
+    return `
+    <div class="card ${it.pinned?'is-pinned':''} ${it.visited?'is-visited':''} ${it.cover?'has-cover':''} ${bulkSelected.has(it.id)?'checked':''}" data-id="${it.id}">
+      <div class="card-top">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <input type="checkbox" class="card-checkbox" ${bulkSelected.has(it.id)?'checked':''}>
+          <span class="date">${formatDate(it.createdAt)}</span>
+        </div>
+        <span class="pin-star">
+          <button class="pin-btn ${it.pinned?'pinned':''}" title="置頂">${it.pinned ? '★ 已收藏' : '☆ 收藏'}</button>
+          <button class="visit-btn ${it.visited?'visited':''}" title="${it.visited?'Done':'標記 Done'}">${it.visited ? '✓ Done' : '○ Done?'}</button>
+        </span>
+      </div>
+      <div class="card-body">
+        ${it.cover ? `<div class="card-cover"><img src="${it.cover}" alt=""></div>` : ''}
+        <div class="card-content">
+          ${(it.cat1) ? `<div class="cat-path">${[it.cat1, it.cat2, it.cat3].filter(Boolean).map(c=>`<span>${escapeHtml(c)}</span>`).join('<span class="cat-sep">›</span>')}</div>` : ''}
+          <div class="title">
+            ${it.url ? `<a href="${escapeHtml(it.url)}" target="_blank" rel="noopener">${escapeHtml(it.title || it.url)}</a>` : escapeHtml(it.title || '(無標題)')}
+          </div>
+          ${it.note ? `<div class="note ${isLong?'collapsed':''}" id="${noteId}">${escapeHtml(it.note)}</div>` : ''}
+          ${(it.note && isLong) ? `<span class="note-toggle" data-target="${noteId}">展開</span>` : ''}
+          <div class="meta">
+            <div class="tags">
+              ${it.saver ? `<span class="tag saver-tag">${it.saver==='小雞毛'?'🐤':'🤍'} ${escapeHtml(it.saver)}</span>` : ''}
+            </div>
+            <div class="actions">
+              <button class="edit-btn">編輯</button>
+              <button class="ghost del-btn">刪除</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;}).join('');
+
+  list.querySelectorAll('.card').forEach(card=>{
+    const id = card.dataset.id;
+    card.querySelector('.edit-btn').addEventListener('click', ()=> openModal(id));
+    card.querySelector('.del-btn').addEventListener('click', async ()=>{
+      if(confirm('確定要刪除這項收藏嗎？')){
+        items = items.filter(it=>it.id!==id);
+        render();
+        setSyncStatus('☁️ 刪除中…');
+        try{
+          await sbDelete(id);
+          setSyncStatus('✓ 已同步');
+        }catch(e){
+          console.error(e);
+          setSyncStatus('⚠️ 同步失敗', true);
+        }
+      }
+    });
+    card.querySelector('.pin-btn').addEventListener('click', async ()=>{
+      const it = items.find(i=>i.id===id);
+      it.pinned = !it.pinned;
+      render();
+      setSyncStatus('☁️ 儲存中…');
+      try{
+        await sbUpsert(it);
+        setSyncStatus('✓ 已同步');
+      }catch(e){
+        console.error(e);
+        setSyncStatus('⚠️ 同步失敗', true);
+      }
+    });
+    card.querySelector('.visit-btn').addEventListener('click', async ()=>{
+      const it = items.find(i=>i.id===id);
+      it.visited = !it.visited;
+      render();
+      setSyncStatus('☁️ 儲存中…');
+      try{
+        await sbUpsert(it);
+        setSyncStatus('✓ 已同步');
+      }catch(e){
+        console.error(e);
+        setSyncStatus('⚠️ 同步失敗', true);
+      }
+    });
+    const toggle = card.querySelector('.note-toggle');
+    if(toggle){
+      toggle.addEventListener('click', ()=>{
+        const note = document.getElementById(toggle.dataset.target);
+        const collapsed = note.classList.toggle('collapsed');
+        toggle.textContent = collapsed ? '展開' : '收合';
+      });
+    }
+    const checkbox = card.querySelector('.card-checkbox');
+    checkbox.addEventListener('change', ()=>{
+      if(checkbox.checked) bulkSelected.add(id);
+      else bulkSelected.delete(id);
+      card.classList.toggle('checked', checkbox.checked);
+      updateBulkBar();
+    });
+  });
+}
+
+function emptySvg(){
+  return `<svg class="big" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 4 C10 18 6 26 6 30 C6 35 12 37 20 37 C28 37 34 35 34 30 C34 26 30 18 20 4 Z" stroke="#B8D6F0" stroke-width="1.8" fill="none" stroke-dasharray="3 3"/>
+  </svg>`;
+}
+
+
+/* ============ Modal ============ */
+/* ============ Category Tree ============ */
+function getCatTree(){
+  // returns { cat1: { cat2: Set(cat3...) } }
+  const tree = {};
+  items.forEach(it=>{
+    if(!it.cat1) return;
+    if(!tree[it.cat1]) tree[it.cat1] = {};
+    if(it.cat2){
+      if(!tree[it.cat1][it.cat2]) tree[it.cat1][it.cat2] = new Set();
+      if(it.cat3) tree[it.cat1][it.cat2].add(it.cat3);
+    }
+  });
+  return tree;
+}
+
+function populateCatSelects(cat1Val, cat2Val){
+  const tree = getCatTree();
+  const sel1 = document.getElementById('f_cat1_select');
+  const sel2 = document.getElementById('f_cat2_select');
+  const sel3 = document.getElementById('f_cat3_select');
+
+  // Populate cat1
+  const cat1s = Object.keys(tree).sort();
+  sel1.innerHTML = `<option value="">選擇已有大類…</option>` +
+    cat1s.map(c=>`<option value="${escapeHtml(c)}" ${cat1Val===c?'selected':''}>${escapeHtml(c)}</option>`).join('');
+
+  // Show/populate cat2
+  const cat2Field = document.getElementById('cat2Field');
+  const cat1Input = document.getElementById('f_cat1');
+  const effectiveCat1 = cat1Val || cat1Input.value.trim();
+
+  if(effectiveCat1 && tree[effectiveCat1]){
+    const cat2s = Object.keys(tree[effectiveCat1]).sort();
+    sel2.innerHTML = `<option value="">選擇已有中類…</option>` +
+      cat2s.map(c=>`<option value="${escapeHtml(c)}" ${cat2Val===c?'selected':''}>${escapeHtml(c)}</option>`).join('');
+    cat2Field.style.display = '';
+  }else if(effectiveCat1){
+    sel2.innerHTML = `<option value="">選擇已有中類…</option>`;
+    cat2Field.style.display = '';
+  }else{
+    cat2Field.style.display = 'none';
+    document.getElementById('cat3Field').style.display = 'none';
+    return;
+  }
+
+  // Show/populate cat3
+  const cat3Field = document.getElementById('cat3Field');
+  const cat2Input = document.getElementById('f_cat2');
+  const effectiveCat2 = cat2Val || cat2Input.value.trim();
+
+  if(effectiveCat2){
+    const cat3s = (tree[effectiveCat1] && tree[effectiveCat1][effectiveCat2])
+      ? [...tree[effectiveCat1][effectiveCat2]].sort()
+      : [];
+    sel3.innerHTML = `<option value="">選擇已有小類…</option>` +
+      cat3s.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+    cat3Field.style.display = '';
+  }else{
+    cat3Field.style.display = 'none';
+  }
+}
+
+function bindCatEvents(){
+  const sel1 = document.getElementById('f_cat1_select');
+  const sel2 = document.getElementById('f_cat2_select');
+  const sel3 = document.getElementById('f_cat3_select');
+  const inp1 = document.getElementById('f_cat1');
+  const inp2 = document.getElementById('f_cat2');
+  const inp3 = document.getElementById('f_cat3');
+
+  sel1.addEventListener('change', ()=>{
+    inp1.value = sel1.value;
+    sel1.value = '';
+    populateCatSelects(inp1.value, null);
+    inp2.value = '';
+    inp3.value = '';
+  });
+  sel2.addEventListener('change', ()=>{
+    inp2.value = sel2.value;
+    sel2.value = '';
+    populateCatSelects(inp1.value, inp2.value);
+    inp3.value = '';
+  });
+  sel3.addEventListener('change', ()=>{
+    inp3.value = sel3.value;
+    sel3.value = '';
+  });
+  inp1.addEventListener('input', ()=>{
+    populateCatSelects(inp1.value, inp2.value);
+  });
+  inp2.addEventListener('input', ()=>{
+    populateCatSelects(inp1.value, inp2.value);
+  });
+}
+
+
+
+let currentCover = null; // base64 data URL or null
+
+function setCoverPreview(dataUrl){
+  currentCover = dataUrl || null;
+  const preview = document.getElementById('coverPreview');
+  const removeBtn = document.getElementById('coverRemoveBtn');
+  if(currentCover){
+    preview.innerHTML = `<img src="${currentCover}" alt="">`;
+    removeBtn.style.display = '';
+  }else{
+    preview.innerHTML = `<span class="cover-placeholder">尚未選擇圖片</span>`;
+    removeBtn.style.display = 'none';
+  }
+}
+
+function checkDuplicateUrl(url, ignoreId){
+  const hint = document.getElementById('dupHint');
+  if(!url){ hint.textContent=''; hint.classList.remove('dup-hint'); return; }
+  const dup = items.find(it=>it.url===url && it.id!==ignoreId);
+  if(dup){
+    hint.textContent = `⚠️ 你已經存過這篇了：「${dup.title || dup.url}」`;
+    hint.classList.add('dup-hint');
+  }else{
+    hint.textContent='';
+    hint.classList.remove('dup-hint');
+  }
+}
+
+function openModal(id){
+  editingId = id || null;
+  const overlay = document.getElementById('overlay');
+  if(id){
+    const it = items.find(i=>i.id===id);
+    document.getElementById('modalTitle').textContent = '編輯收藏';
+    document.getElementById('f_title').value = it.title || '';
+    document.getElementById('f_url').value = it.url || '';
+    document.getElementById('f_note').value = it.note || '';
+    document.getElementById('f_date').value = toDateInputValue(it.createdAt);
+    document.getElementById('f_saver').value = it.saver || '';
+    document.getElementById('f_cat1').value = it.cat1 || '';
+    document.getElementById('f_cat2').value = it.cat2 || '';
+    document.getElementById('f_cat3').value = it.cat3 || '';
+    setCoverPreview(it.cover || null);
+    populateCatSelects(it.cat1, it.cat2);
+  }else{
+    document.getElementById('modalTitle').textContent = '新增收藏';
+    document.getElementById('f_title').value = '';
+    document.getElementById('f_url').value = '';
+    document.getElementById('f_note').value = '';
+    document.getElementById('f_date').value = toDateInputValue(Date.now());
+    document.getElementById('f_saver').value = localStorage.getItem(LAST_SAVER_KEY) || '';
+    document.getElementById('f_cat1').value = '';
+    document.getElementById('f_cat2').value = '';
+    document.getElementById('f_cat3').value = '';
+    document.getElementById('cat2Field').style.display = 'none';
+    document.getElementById('cat3Field').style.display = 'none';
+    setCoverPreview(null);
+    populateCatSelects(null, null);
+    if(navigator.clipboard && navigator.clipboard.readText){
+      navigator.clipboard.readText().then(text=>{
+        const trimmed = (text||'').trim();
+        if(/^https?:\/\/\S+$/i.test(trimmed)){
+          document.getElementById('f_url').value = trimmed;
+          checkDuplicateUrl(trimmed, editingId);
+        }
+      }).catch(()=>{});
+    }
+  }
+  document.getElementById('f_cover').value = '';
+  checkDuplicateUrl(document.getElementById('f_url').value.trim(), editingId);
+  bindCatEvents();
+  overlay.classList.add('show');
+  document.getElementById('f_title').focus();
+}
+function closeModal(){
+  document.getElementById('overlay').classList.remove('show');
+  editingId = null;
+}
+
+async function saveEntry(){
+  const title = document.getElementById('f_title').value.trim();
+  const url = document.getElementById('f_url').value.trim();
+  const note = document.getElementById('f_note').value.trim();
+  const dateVal = document.getElementById('f_date').value;
+  const saver = document.getElementById('f_saver').value;
+  const cat1 = document.getElementById('f_cat1').value.trim() || null;
+  const cat2 = document.getElementById('f_cat2').value.trim() || null;
+  const cat3 = document.getElementById('f_cat3').value.trim() || null;
+
+  if(!title && !url){
+    alert('請至少填寫標題或連結');
+    return;
+  }
+
+  let savedItem;
+  if(editingId){
+    const it = items.find(i=>i.id===editingId);
+    it.title = title; it.url = url; it.note = note;
+    it.createdAt = dateInputToTimestamp(dateVal, it.createdAt);
+    it.saver = saver;
+    it.cat1 = cat1; it.cat2 = cat2; it.cat3 = cat3;
+    it.cover = currentCover;
+    savedItem = it;
+  }else{
+    savedItem = {
+      id: uid(),
+      title, url, note, tags: [],
+      pinned: false,
+      visited: false,
+      saver,
+      cat1, cat2, cat3,
+      cover: currentCover,
+      createdAt: dateInputToTimestamp(dateVal, Date.now())
+    };
+    items.push(savedItem);
+  }
+  if(saver){
+    localStorage.setItem(LAST_SAVER_KEY, saver);
+  }
+  closeModal();
+  render();
+  setSyncStatus('☁️ 儲存中…');
+  try{
+    await sbUpsert(savedItem);
+    setSyncStatus('✓ 已同步');
+  }catch(e){
+    console.error(e);
+    setSyncStatus('⚠️ ' + e.message, true);
+  }
+}
+
+/* ============ Export / Import ============ */
+function setExportProgress(text){
+  const el = document.getElementById('exportProgress');
+  if(!text){
+    el.style.display = 'none';
+    el.textContent = '';
+  }else{
+    el.style.display = '';
+    el.textContent = text;
+  }
+}
+
+function pickExportCategory(){
+  return new Promise((resolve)=>{
+    const tree = getCatTree();
+    const cat1s = Object.keys(tree).sort();
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:999;padding:20px;';
+    overlay.innerHTML = `
+      <div style="background:var(--card);border:2px solid var(--sky);border-radius:20px;padding:24px;width:100%;max-width:360px;">
+        <div style="font-family:'Zen Maru Gothic',sans-serif;font-weight:700;font-size:16px;color:var(--sky-deep);margin-bottom:14px;">選擇匯出範圍</div>
+        <select id="_exportCatSel" style="width:100%;padding:10px 14px;border:2px solid var(--line);background:var(--sky-soft);color:var(--ink);-webkit-text-fill-color:var(--ink);font-family:'Zen Maru Gothic',sans-serif;font-size:14px;border-radius:12px;margin-bottom:14px;">
+          <option value="">全部收藏</option>
+          ${cat1s.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('')}
+        </select>
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+          <button id="_exportCatCancel" style="font-family:'Zen Maru Gothic',sans-serif;padding:9px 18px;border:2px solid var(--line);border-radius:20px;background:transparent;cursor:pointer;color:var(--ink-soft);">取消</button>
+          <button id="_exportCatOk" style="font-family:'Zen Maru Gothic',sans-serif;padding:9px 18px;border:2px solid var(--sky-deep);border-radius:20px;background:var(--sky-deep);color:#fff;cursor:pointer;font-weight:700;">確定匯出</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+    document.getElementById('_exportCatOk').addEventListener('click', ()=>{
+      const val = document.getElementById('_exportCatSel').value;
+      document.body.removeChild(overlay);
+      resolve(val || null);
+    });
+    document.getElementById('_exportCatCancel').addEventListener('click', ()=>{
+      document.body.removeChild(overlay);
+      resolve(undefined);
+    });
+  });
+}
+
+function getExportItems(category){
+  const sorted = [...items].sort((a,b)=> (b.pinned?1:0)-(a.pinned?1:0) || b.createdAt - a.createdAt);
+  if(!category) return sorted;
+  return sorted.filter(it=> it.cat1 === category);
+}
+
+// Generate a QR code as a PNG data URL using qrcodejs (renders into a hidden offscreen div)
+function generateQrDataUrl(text){
+  return new Promise((resolve)=>{
+    if(!text || typeof QRCode === 'undefined'){
+      resolve(null);
+      return;
+    }
+    const holder = document.createElement('div');
+    holder.style.position = 'fixed';
+    holder.style.left = '-9999px';
+    holder.style.top = '-9999px';
+    document.body.appendChild(holder);
+    try{
+      new QRCode(holder, {
+        text: text,
+        width: 160,
+        height: 160,
+        colorDark: '#3A4A5C',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+      // qrcodejs renders synchronously into a canvas or img
+      setTimeout(()=>{
+        let dataUrl = null;
+        const canvas = holder.querySelector('canvas');
+        const img = holder.querySelector('img');
+        if(canvas){
+          dataUrl = canvas.toDataURL('image/png');
+        }else if(img && img.src){
+          dataUrl = img.src;
+        }
+        document.body.removeChild(holder);
+        resolve(dataUrl);
+      }, 50);
+    }catch(e){
+      console.error('QR generation failed', e);
+      document.body.removeChild(holder);
+      resolve(null);
+    }
+  });
+}
+
+/* ---- PDF Export ---- */
+async function exportPdf(){
+  if(items.length===0){ alert('還沒有任何收藏可以匯出'); return; }
+  const category = await pickExportCategory();
+  if(category === undefined) return;
+  const sorted = getExportItems(category);
+  if(sorted.length===0){ alert('這個分類目前沒有資料'); return; }
+  setExportProgress('☁️ 準備中…');
+
+  const qrMap = {};
+  for(let i=0; i<sorted.length; i++){
+    setExportProgress(`☁️ 產生 QR code… (${i+1}/${sorted.length})`);
+    const it = sorted[i];
+    if(it.url){ try{ qrMap[it.id] = await generateQrDataUrl(it.url); }catch(e){} }
+  }
+
+  const catLabel = category ? ` / ${category}` : '';
+  let bodyHtml = '';
+  sorted.forEach(it=>{
+    const catPath = [it.cat1,it.cat2,it.cat3].filter(Boolean).map(c=>c.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')).join(' › ');
+    const qrImg = qrMap[it.id] ? `<img src="${qrMap[it.id]}" class="qr">` : '';
+    const t = (it.title||it.url||'(無標題)').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const n = (it.note||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    bodyHtml += `<div class="item">${qrImg}<div class="content">${catPath?`<div class="cat">${catPath}</div>`:''}<div class="title">${t}</div>${it.url?`<div class="url">${escapeHtml(it.url)}</div>`:''} ${n?`<div class="note">${n}</div>`:''}<div class="meta">${[it.saver,formatDate(it.createdAt)].filter(Boolean).join(' · ')}</div></div></div>`;
+  });
+
+  const printHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Thread收藏</title><style>body{font-family:'PingFang TC','Microsoft JhengHei',sans-serif;margin:20px;color:#333;}h1{font-size:18px;}.sub{font-size:11px;color:#999;margin-bottom:20px;}.item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid #eee;page-break-inside:avoid;}.qr{width:80px;height:80px;flex-shrink:0;}.content{flex:1;}.cat{font-size:10px;color:#5A9BD4;font-weight:bold;margin-bottom:3px;}.title{font-size:14px;font-weight:bold;margin-bottom:4px;}.url{font-size:10px;color:#888;margin-bottom:4px;word-break:break-all;}.note{font-size:12px;color:#555;margin-bottom:4px;white-space:pre-wrap;}.meta{font-size:10px;color:#aaa;}</style></head><body><h1>Thread收藏✐☡${catLabel}</h1><div class="sub">匯出於 ${formatDate(Date.now())} · 共 ${sorted.length} 筆</div>${bodyHtml}</body></html>`;
+
+  const win = window.open('','_blank');
+  if(win){ win.document.write(printHtml); win.document.close(); win.onload=()=>win.print(); }
+  else{
+    const blob=new Blob([printHtml],{type:'text/html'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download=`Thread收藏_${formatDate(Date.now())}_列印版.html`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  }
+  setExportProgress(null);
+}
+
+async function exportWord(){
+  if(items.length===0){ alert('還沒有任何收藏可以匯出'); return; }
+  const category = await pickExportCategory();
+  if(category === undefined) return;
+  const sorted = getExportItems(category);
+  if(sorted.length===0){ alert('這個分類目前沒有資料'); return; }
+
+  let bodyHtml = '';
+  for(let i=0; i<sorted.length; i++){
+    const it = sorted[i];
+    setExportProgress(`☁️ 匯出 Word 中… (${i+1}/${sorted.length})`);
+    let qrCell = '<td style="width:0"></td>';
+    if(it.url){
+      try{
+        const qrData = await generateQrDataUrl(it.url);
+        if(qrData) qrCell = `<td style="width:90px;vertical-align:top;padding-right:14px;padding-top:4px;"><img src="${qrData}" width="80" height="80" /></td>`;
+      }catch(e){}
+    }
+    const titleHtml = it.url ? `<a href="${escapeHtml(it.url)}">${escapeHtml(it.title||it.url)}</a>` : escapeHtml(it.title||'(無標題)');
+    const catPath = [it.cat1,it.cat2,it.cat3].filter(Boolean).map(escapeHtml).join(' › ');
+    bodyHtml += `<table style="width:100%;margin-bottom:18px;border-bottom:1px solid #ddd;padding-bottom:14px;border-collapse:collapse;"><tr>${qrCell}<td style="vertical-align:top;"><div style="font-size:14pt;font-weight:bold;margin-bottom:4px;">${titleHtml}</div>${catPath?`<div style="font-size:9pt;color:#5A9BD4;margin-bottom:3px;">${catPath}</div>`:''}${it.note?`<div style="font-size:10pt;color:#555;white-space:pre-wrap;margin-bottom:4px;">${escapeHtml(it.note)}</div>`:''}<div style="font-size:9pt;color:#aaa;">${[it.saver,formatDate(it.createdAt)].filter(Boolean).join(' · ')}</div></td></tr></table>`;
+  }
+
+  const html = `<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="UTF-8"></head><body style="font-family:'Microsoft JhengHei','PingFang TC',sans-serif;margin:30px;"><h1>Thread收藏✐☡</h1><p style="color:#999;font-size:9pt;">匯出於 ${formatDate(Date.now())} · 共 ${sorted.length} 筆</p>${bodyHtml}</body></html>`;
+  const blob = new Blob(['\ufeff', html], {type:'application/msword'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `Thread收藏_${formatDate(Date.now())}.doc`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setExportProgress(null);
+}
+
+async function exportJpeg(){
+  if(items.length===0){ alert('還沒有任何收藏可以匯出'); return; }
+  const category = await pickExportCategory();
+  if(category === undefined) return;
+  const sorted = getExportItems(category);
+  if(sorted.length===0){ alert('這個分類目前沒有資料'); return; }
+  setExportProgress('☁️ 準備中…');
+
+  const qrMap = {};
+  for(let i=0; i<sorted.length; i++){
+    setExportProgress(`☁️ 產生 QR code… (${i+1}/${sorted.length})`);
+    const it = sorted[i];
+    if(it.url){
+      try{
+        const d = await generateQrDataUrl(it.url);
+        if(d){ const img=new Image(); await new Promise(r=>{img.onload=r;img.src=d;}); qrMap[it.id]=img; }
+      }catch(e){}
+    }
+  }
+
+  const W=800, PAD=24, QR=80, CP=16, GAP=12;
+
+  function splitLines(ctx, text, maxW, font){
+    ctx.font=font;
+    const lines=[];
+    for(const para of (text||'').split('\n')){
+      if(!para){lines.push('');continue;}
+      let line='';
+      for(const ch of para){
+        const t=line+ch;
+        if(ctx.measureText(t).width>maxW&&line){lines.push(line);line=ch;}else line=t;
+      }
+      if(line)lines.push(line);
+    }
+    return lines;
+  }
+
+  const tmpC=document.createElement('canvas'); tmpC.width=W; const tx=tmpC.getContext('2d');
+  function measureH(it){
+    const hasQr=!!qrMap[it.id];
+    const tW=W-PAD*2-CP*2-(hasQr?QR+14:0)-8;
+    let h=CP;
+    if(it.cat1) h+=16;
+    h+=splitLines(tx,it.title||it.url||'(無標題)',tW,'bold 16px sans-serif').length*21+4;
+    if(it.note) h+=splitLines(tx,it.note,tW,'13px sans-serif').length*17+6;
+    h+=18+CP;
+    return Math.max(h, hasQr?QR+CP*2:0);
+  }
+
+  const blocks=sorted.map(it=>({it,h:measureH(it)}));
+  const totalH=PAD+56+blocks.reduce((s,b)=>s+b.h+GAP,0)+PAD;
+  const canvas=document.createElement('canvas');
+  canvas.width=W; canvas.height=Math.min(totalH,32000);
+  const ctx=canvas.getContext('2d');
+
+  ctx.fillStyle='#F3F8FD'; ctx.fillRect(0,0,W,canvas.height);
+
+  let y=PAD;
+  ctx.fillStyle='#5A9BD4'; ctx.font='bold 22px sans-serif'; ctx.fillText('Thread收藏✐☡',PAD,y+22);
+  ctx.fillStyle='#94ABBE'; ctx.font='12px sans-serif'; ctx.fillText(`匯出於 ${formatDate(Date.now())} · 共 ${sorted.length} 筆`,PAD,y+44);
+  y+=56;
+
+  for(let i=0;i<blocks.length;i++){
+    setExportProgress(`☁️ 繪製… (${i+1}/${blocks.length})`);
+    const {it,h}=blocks[i];
+    if(y+h>canvas.height-PAD) break;
+
+    ctx.fillStyle='#fff'; ctx.strokeStyle='#D9E9F7'; ctx.lineWidth=2;
+    roundRect(ctx,PAD,y,W-PAD*2,h,12); ctx.fill(); ctx.stroke();
+
+    const hasQr=!!qrMap[it.id];
+    if(hasQr) ctx.drawImage(qrMap[it.id],PAD+CP,y+CP,QR,QR);
+    const tX=PAD+CP+(hasQr?QR+14:0);
+    const tW=W-PAD*2-CP*2-(hasQr?QR+14:0)-8;
+    let ty=y+CP+14;
+
+    if(it.cat1){
+      ctx.fillStyle='#5A9BD4'; ctx.font='bold 11px sans-serif';
+      ctx.fillText([it.cat1,it.cat2,it.cat3].filter(Boolean).join(' › '),tX,ty); ty+=16;
+    }
+    const tLines=splitLines(ctx,it.title||it.url||'(無標題)',tW,'bold 16px sans-serif');
+    ctx.fillStyle='#3A4A5C'; ctx.font='bold 16px sans-serif';
+    tLines.forEach(l=>{ctx.fillText(l,tX,ty);ty+=21;}); ty+=4;
+
+    if(it.note){
+      const nLines=splitLines(ctx,it.note,tW,'13px sans-serif');
+      ctx.fillStyle='#7A95B0'; ctx.font='13px sans-serif';
+      nLines.forEach(l=>{ctx.fillText(l,tX,ty);ty+=17;}); ty+=6;
+    }
+    ctx.fillStyle='#AAB8C4'; ctx.font='11px sans-serif';
+    ctx.fillText([it.saver,formatDate(it.createdAt)].filter(Boolean).join(' · '),tX,ty);
+    y+=h+GAP;
+  }
+
+  const out=document.createElement('canvas');
+  out.width=W; out.height=Math.min(y+PAD,canvas.height);
+  out.getContext('2d').drawImage(canvas,0,0);
+  out.toBlob(blob=>{
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download=`Thread收藏_${formatDate(Date.now())}.jpg`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setExportProgress(null);
+  },'image/jpeg',0.92);
+}
+
+
+function roundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.arcTo(x+w, y, x+w, y+h, r);
+  ctx.arcTo(x+w, y+h, x, y+h, r);
+  ctx.arcTo(x, y+h, x, y, r);
+  ctx.arcTo(x, y, x+w, y, r);
+  ctx.closePath();
+}
+
+async function exportHtml(){
+  if(items.length===0){
+    alert('還沒有任何收藏可以匯出');
+    return;
+  }
+  const category = await pickExportCategory();
+  if(category === undefined) return;
+  const exportItems = getExportItems(category);
+  if(exportItems.length===0){ alert('這個分類目前沒有資料'); return; }
+
+  // Group by cat1
+  const groups = {};
+  exportItems.forEach(it=>{
+    const cat = it.cat1 || '未分類';
+    if(!groups[cat]) groups[cat] = [];
+    groups[cat].push(it);
+  });
+  const cats = Object.keys(groups).sort();
+
+  const sectionsHtml = cats.map(cat=>{
+    const sorted = [...groups[cat]].sort((a,b)=>b.createdAt-a.createdAt);
+    const itemsHtml = sorted.map(it=>{
+      const catPath = [it.cat1, it.cat2, it.cat3].filter(Boolean).map(escapeHtml).join(' › ');
+      return `
+      <div class="s-card">
+        ${it.cover ? `<img class="s-cover" src="${it.cover}" alt="">` : ''}
+        <div class="s-body">
+          ${catPath ? `<div class="s-cat">${catPath}</div>` : ''}
+          <div class="s-title">${it.url ? `<a href="${escapeHtml(it.url)}" target="_blank" rel="noopener">${escapeHtml(it.title || it.url)}</a>` : escapeHtml(it.title || '(無標題)')}</div>
+          ${it.note ? `<div class="s-note">${escapeHtml(it.note)}</div>` : ''}
+          <div class="s-meta">
+            ${it.saver ? `<span class="s-tag s-saver">${it.saver==='小雞毛'?'🐤':'🤍'} ${escapeHtml(it.saver)}</span>` : ''}
+            <span class="s-date">${formatDate(it.createdAt)}</span>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+    return `<section class="s-section"><h2>${escapeHtml(cat)} <span class="s-count">(${sorted.length})</span></h2>${itemsHtml}</section>`;
+  }).join('');
+
+  const html = `<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thread收藏✐☡ — 分享頁面</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap');
+  :root{
+    --paper:#F3F8FD; --ink:#3A4A5C; --ink-soft:#94ABBE;
+    --line:#D9E9F7; --line-soft:#E9F3FB; --card:#FFFFFF;
+    --sky:#7FB8E8; --sky-soft:#EAF4FD; --sky-deep:#5A9BD4;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Zen Maru Gothic',sans-serif;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:720px;margin:0 auto;padding:32px 20px 60px;}
+  h1{font-size:24px;margin:0 0 4px;color:var(--sky-deep);}
+  .subtitle{font-size:12px;color:var(--ink-soft);margin-bottom:24px;}
+  .s-section{margin-bottom:28px;}
+  .s-section h2{font-size:16px;color:var(--sky-deep);border-bottom:2px solid var(--sky-soft);padding-bottom:8px;margin-bottom:12px;}
+  .s-count{font-size:12px;color:var(--ink-soft);font-weight:400;}
+  .s-card{
+    background:var(--card); border:2px solid var(--line); border-radius:16px;
+    padding:14px 16px; margin-bottom:10px; display:flex; gap:12px; box-shadow:0 3px 0 var(--line-soft);
+  }
+  .s-cover{width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;border:2px solid var(--line-soft);}
+  .s-body{flex:1;min-width:0;}
+  .s-cat{font-size:11px;font-weight:700;color:#5A9BD4;margin-bottom:4px;}
+  .s-title{font-weight:700;font-size:15px;margin-bottom:4px;word-break:break-word;}
+  .s-title a{color:var(--ink);text-decoration:none;border-bottom:2px solid var(--sky-soft);}
+  .s-note{font-size:12.5px;color:var(--ink-soft);margin-bottom:8px;line-height:1.6;white-space:pre-wrap;}
+  .s-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+  .s-tag{font-size:10.5px;font-weight:700;padding:3px 10px;background:var(--sky-soft);color:var(--sky-deep);border-radius:20px;}
+  .s-tag.s-saver{background:var(--line-soft);color:var(--ink-soft);border:1.5px solid var(--line);}
+  .s-date{font-size:10.5px;color:var(--ink-soft);margin-left:auto;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Thread收藏✐☡</h1>
+  <div class="subtitle">分享頁面 · 匯出於 ${formatDate(Date.now())} · 共 ${exportItems.length} 筆${category?' · 分類：'+escapeHtml(category):''}（此頁僅供瀏覽，不會與原收藏同步）</div>
+  ${sectionsHtml}
+</div>
+</body>
+</html>`;
+
+  const blob = new Blob([html], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `Thread收藏_分享頁面_${formatDate(Date.now())}.html`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function exportData(){
+  const blob = new Blob([JSON.stringify(items, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `Thread收藏_備份_${formatDate(Date.now())}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+function importData(file){
+  const reader = new FileReader();
+  reader.onload = async (e)=>{
+    try{
+      const data = JSON.parse(e.target.result);
+      if(!Array.isArray(data)) throw new Error('格式錯誤');
+      const valid = data.filter(d=>d && typeof d==='object');
+      if(items.length>0){
+        if(!confirm(`匯入 ${valid.length} 筆資料嗎？這會加到目前的清單後面（不會覆蓋現有資料）。`)) return;
+      }
+      const newItems = valid.map(d=>({
+        id: d.id || uid(),
+        title: d.title || '',
+        url: d.url || '',
+        note: d.note || '',
+        tags: Array.isArray(d.tags) ? d.tags : [],
+        pinned: !!d.pinned,
+        visited: !!d.visited,
+        cat1: d.cat1 || null,
+        cat2: d.cat2 || null,
+        cat3: d.cat3 || null,
+        saver: d.saver || '',
+        cover: d.cover || null,
+        createdAt: d.createdAt || Date.now()
+      }));
+      newItems.forEach(it=>items.push(it));
+      render();
+          setSyncStatus('☁️ 匯入中…');
+      try{
+        await sbUpsertMany(newItems);
+        setSyncStatus('✓ 已同步');
+        alert('匯入完成！');
+      }catch(err){
+        console.error(err);
+        setSyncStatus('⚠️ 同步失敗', true);
+        alert('匯入完成，但雲端同步失敗，請檢查網路後重新整理');
+      }
+    }catch(err){
+      alert('匯入失敗：檔案格式不正確');
+    }
+  };
+  reader.readAsText(file);
+}
+
+/* ============ Random Review ============ */
+function showRandomReview(){
+  if(items.length === 0){
+    alert('還沒有收藏可以回顧喔～');
+    return;
+  }
+  const it = items[Math.floor(Math.random() * items.length)];
+  const card = document.getElementById('reviewCard');
+  card.innerHTML = `
+    <div class="eyebrow">隨機回顧</div>
+    <h3>${it.url ? `<a href="${escapeHtml(it.url)}" target="_blank" rel="noopener">${escapeHtml(it.title || it.url)}</a>` : escapeHtml(it.title || '(無標題)')}</h3>
+    ${it.note ? `<div class="note">${escapeHtml(it.note)}</div>` : ''}
+    ${(it.tags && it.tags.length) ? `<div class="tags">${it.tags.map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : (it.cat1 ? `<div class="tags"><span class="tag">${[it.cat1,it.cat2,it.cat3].filter(Boolean).map(escapeHtml).join(' › ')}</span></div>` : '')}
+    <div class="actions">
+      <button class="ghost" id="reviewClose">關閉</button>
+      <button class="random" id="reviewAgain">🎲 再抽一個</button>
+    </div>
+  `;
+  document.getElementById('reviewOverlay').classList.add('show');
+  document.getElementById('reviewClose').addEventListener('click', ()=>{
+    document.getElementById('reviewOverlay').classList.remove('show');
+  });
+  document.getElementById('reviewAgain').addEventListener('click', showRandomReview);
+}
+
+/* ============ Events ============ */
+document.getElementById('randomBtn').addEventListener('click', showRandomReview);
+document.getElementById('reviewOverlay').addEventListener('click', (e)=>{
+  if(e.target.id==='reviewOverlay') document.getElementById('reviewOverlay').classList.remove('show');
+});
+document.getElementById('addBtn').addEventListener('click', ()=>openModal(null));
+document.getElementById('cancelBtn').addEventListener('click', closeModal);
+document.getElementById('saveBtn').addEventListener('click', saveEntry);
+document.getElementById('coverPickBtn').addEventListener('click', ()=>{
+  document.getElementById('f_cover').click();
+});
+document.getElementById('coverRemoveBtn').addEventListener('click', ()=>{
+  setCoverPreview(null);
+});
+document.getElementById('f_cover').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > 2*1024*1024){
+    alert('圖片太大了，請選擇 2MB 以內的圖片');
+    e.target.value = '';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (ev)=> setCoverPreview(ev.target.result);
+  reader.readAsDataURL(file);
+});
+document.getElementById('f_url').addEventListener('input', (e)=>{
+  checkDuplicateUrl(e.target.value.trim(), editingId);
+});
+document.getElementById('overlay').addEventListener('click', (e)=>{
+  if(e.target.id==='overlay') closeModal();
+});
+document.getElementById('searchInput').addEventListener('input', render);
+document.getElementById('bulkToggleBtn').addEventListener('click', toggleBulkMode);
+document.getElementById('bulkDeleteBtn').addEventListener('click', async ()=>{
+  if(bulkSelected.size===0){ alert('還沒選取任何項目'); return; }
+  if(confirm(`確定要刪除選取的 ${bulkSelected.size} 筆收藏嗎？`)){
+    const idsToDelete = [...bulkSelected];
+    items = items.filter(it=>!bulkSelected.has(it.id));
+    bulkSelected.clear();
+    render();
+      setSyncStatus('☁️ 刪除中…');
+    try{
+      await sbDeleteMany(idsToDelete);
+      setSyncStatus('✓ 已同步');
+    }catch(e){
+      console.error(e);
+      setSyncStatus('⚠️ 同步失敗', true);
+    }
+  }
+});
+document.querySelectorAll('.saver-chip').forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    activeSaver = chip.dataset.saver || null;
+    syncSaverChips();
+    render();
+  });
+});
+document.getElementById('exportHtmlBtn').addEventListener('click', exportHtml);
+document.getElementById('exportPdfBtn').addEventListener('click', exportPdf);
+document.getElementById('exportWordBtn').addEventListener('click', exportWord);
+document.getElementById('exportJpegBtn').addEventListener('click', exportJpeg);
+document.getElementById('exportBtn').addEventListener('click', exportData);
+document.getElementById('importBtn').addEventListener('click', ()=>document.getElementById('fileInput').click());
+document.getElementById('fileInput').addEventListener('change', (e)=>{
+  if(e.target.files[0]) importData(e.target.files[0]);
+  e.target.value = '';
+});
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click', ()=>switchView(t.dataset.view));
+});
+document.addEventListener('keydown', (e)=>{
+  if(e.key==='Escape'){
+    closeModal();
+    document.getElementById('reviewOverlay').classList.remove('show');
+  }
+  if(e.key==='Enter' && e.ctrlKey && document.getElementById('overlay').classList.contains('show')) saveEntry();
+
+  // Quick-add shortcut: "/" opens the add modal, unless typing in a field
+  if(e.key==='/' && !document.getElementById('overlay').classList.contains('show')){
+    const tag = document.activeElement.tagName;
+    if(tag !== 'INPUT' && tag !== 'TEXTAREA'){
+      e.preventDefault();
+      openModal(null);
+    }
+  }
+});
+
+
+/* ============ Theme ============ */
+const THEME_KEY = 'thread-collector-theme';
+function applyTheme(theme){
+  if(theme === 'dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.getElementById('themeToggle').textContent = '☀️';
+  }else{
+    document.documentElement.removeAttribute('data-theme');
+    document.getElementById('themeToggle').textContent = '🌙';
+  }
+}
+function loadTheme(){
+  const saved = localStorage.getItem(THEME_KEY);
+  applyTheme(saved === 'dark' ? 'dark' : 'light');
+}
+document.getElementById('themeToggle').addEventListener('click', ()=>{
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+});
+
+loadTheme();
+render();
+load().then(()=>{
+  render();
+});
+</script>
+</body>
+</html>
